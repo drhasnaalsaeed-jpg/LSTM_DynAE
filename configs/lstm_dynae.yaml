@@ -1,0 +1,87 @@
+# configs/lstm_dynae.yaml
+#
+# LSTM-DynAE hyperparameters and configuration. Every value below is one of:
+#   [A] explicitly stated in the manuscript
+#   [B] a direct mathematical consequence of a manuscript equation
+#   [C] a necessary software implementation choice not specified in the manuscript
+#   [D] a configurable implementation choice not explicitly specified in the
+#       manuscript, left for the user to confirm/set
+#
+# See README.md "Implementation Audit Against Manuscript" for the full
+# classification of every field below.
+
+seed: 42  # [A] Section 4.3: "fixed random seed of 42"
+
+model:
+  encoder_units: [64, 128]   # [A] Section 3.1
+  decoder_units: [128, 64]   # [A] Section 3.1
+  # input_timesteps / input_features are dataset-dependent and set by the
+  # dataset loader at runtime (see lstm_dynae/datasets.py, Table 1).
+
+critic:
+  # [D] Configurable implementation choice used in this implementation;
+  # the exact critic architecture is not explicitly specified in the
+  # manuscript (Section 3.2 states only that C predicts a scalar
+  # interpolation coefficient from a sequence). See lstm_dynae/critic.py.
+  recurrent_units: [64, 32]
+  output_units: 1
+
+pretraining:
+  iterations: 130000          # [A] "1.3 x 10^5 iterations", Section 3.2 / 4.3
+  optimizer: adam             # [A] Section 4.3
+  learning_rate: 0.0001       # [A] Section 4.3: 1e-4
+  first_moment_decay: 0.9     # [A] Section 4.3: first-moment decay rate = 0.9
+  second_moment_decay: 0.999  # [A] Section 4.3: second-moment decay rate = 0.999
+  lambda_acai: 0.5            # [A] Section 3.2: "lambda = 0.5"
+  # [D] Exact tau_1 / tau_2 sampling distribution is read literally as
+  # Uniform(0, 1) from "randomly selected from the range [0, 1]"
+  # (Section 3.2). See lstm_dynae/acai.py.
+  interpolation_coefficient_distribution: "uniform_0_1"
+
+clustering:
+  optimizer: sgd               # [A] Section 3.3.3 / 4.3
+  learning_rate: 0.001          # [A] Section 4.3
+  momentum: 0.9                 # [A] Section 4.3
+  batch_size: 256                # [A] Section 4.3
+  student_t_alpha: 1.0            # [A] Section 4.3: "alpha = 1"
+  kappa: 3                         # [A] Section 4.3: "kappa = 3"
+  tau_stop: 0.01                    # [A] Section 4.3: "tau_p falls below 1%"
+  # [D] Exact numerical MaxItr is not explicitly reported in the
+  # LSTM-DynAE manuscript (Algorithm 1 / Section 3.3.3 reference it
+  # symbolically only). Set this value before running the clustering
+  # phase; scripts/train_clustering.py will raise an error rather than
+  # silently choosing a value if this is left null.
+  max_iterations: null
+  # [D] Candidate pool for 1-NN centroid substitution (Section 3.3.2).
+  # Configurable implementation choice; see lstm_dynae/dynamic_loss.py.
+  neighbor_pool: "batch"   # "batch" | "full_dataset"
+  # [D] How often (in iterations) to evaluate the dataset-level tau_p
+  # (Eq. 11) used for the stopping decision. null = once per
+  # epoch-equivalent (ceil(N / batch_size) iterations). Configurable
+  # implementation choice: the manuscript specifies tau_p < 1% as the
+  # stopping criterion but not how frequently it is (re-)evaluated during
+  # mini-batch training. See lstm_dynae/model.py::compute_global_tau_p.
+  tau_p_check_interval: null
+
+preprocessing:
+  # [C] Necessary implementation choice, not specified in the manuscript.
+  normalization: "minmax"
+  # [D] Configurable implementation choice for EEG Eye State / Ozone
+  # Level Detection only (continuous-stream datasets requiring windowing;
+  # see lstm_dynae/preprocessing.py). Leave null for the three natively
+  # sequential datasets (PenDigits, Handwriting, RacketSports).
+  sequence_length: null
+  stride: 1
+  # [D] Configurable implementation choice; augmentation magnitudes are
+  # not numerically specified in the manuscript.
+  augment: true
+  max_rescale_delta: 0.10
+  max_rotation_rad: 0.05
+
+datasets:
+  # K (num_clusters) per dataset = "classes" column of Table 1.
+  PenDigits: {samples: 7494, dimensions: 2, classes: 10}
+  Handwriting: {samples: 1000, dimensions: 3, classes: 26}
+  RacketSports: {samples: 303, dimensions: 6, classes: 4}
+  EEGEyeState: {samples: 14980, dimensions: 14, classes: 2}
+  OzoneLevelDetection: {samples: 2536, dimensions: 24, classes: 2}
