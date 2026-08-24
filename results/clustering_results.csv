@@ -1,0 +1,41 @@
+dataset,method,ACC,NMI
+PenDigits,LSTM-DynAE,0.82,0.88
+PenDigits,DynAE,0.68,0.62
+PenDigits,DTC,0.79,0.71
+PenDigits,IT-TSC,0.64,0.60
+PenDigits,DTCR,0.71,0.69
+PenDigits,DEC,0.54,0.52
+PenDigits,ADEC,0.64,0.60
+PenDigits,IDEC,0.61,0.59
+Handwriting,LSTM-DynAE,0.80,0.77
+Handwriting,DynAE,0.59,0.53
+Handwriting,DTC,0.68,0.65
+Handwriting,IT-TSC,0.57,0.54
+Handwriting,DTCR,0.67,0.64
+Handwriting,DEC,0.44,0.41
+Handwriting,ADEC,0.57,0.50
+Handwriting,IDEC,0.48,0.46
+RacketSports,LSTM-DynAE,0.95,0.93
+RacketSports,DynAE,0.78,0.74
+RacketSports,DTC,0.79,0.80
+RacketSports,IT-TSC,0.75,0.75
+RacketSports,DTCR,0.60,0.60
+RacketSports,DEC,0.41,0.40
+RacketSports,ADEC,0.57,0.50
+RacketSports,IDEC,0.59,0.57
+EEG Eye State,LSTM-DynAE,0.97,0.95
+EEG Eye State,DynAE,0.66,0.63
+EEG Eye State,DTC,0.71,0.70
+EEG Eye State,IT-TSC,0.68,0.69
+EEG Eye State,DTCR,0.69,0.69
+EEG Eye State,DEC,0.58,0.53
+EEG Eye State,ADEC,0.68,0.69
+EEG Eye State,IDEC,0.63,0.62
+Ozone Level Detection,LSTM-DynAE,0.92,0.90
+Ozone Level Detection,DynAE,0.75,0.75
+Ozone Level Detection,DTC,0.82,0.79
+Ozone Level Detection,IT-TSC,0.67,0.64
+Ozone Level Detection,DTCR,0.61,0.62
+Ozone Level Detection,DEC,0.65,0.64
+Ozone Level Detection,ADEC,0.67,0.64
+Ozone Level Detection,IDEC,0.62,0.62
