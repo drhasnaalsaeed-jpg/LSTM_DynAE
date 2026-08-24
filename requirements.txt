@@ -1,0 +1,15 @@
+# requirements.txt
+#
+# Environment specified by the task brief:
+#   Python 3, TensorFlow 2.20.0 compatible.
+#
+# Every package below is actually imported somewhere in lstm_dynae/ or
+# scripts/ -- no speculative additions.
+
+tensorflow==2.20.0
+numpy
+pandas
+scikit-learn
+scipy
+matplotlib
+pyyaml
