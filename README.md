@@ -6,7 +6,7 @@ Implementation accompanying the manuscript:
 
 Hasna AlSaeed, Riadh Ksantini, and Faisal AlKhateeb
 
-*Multimedia Tools and Applications* (Manuscript MTAP-D-25-01346).
+*Multimedia Tools and Applications*
 
 This repository provides the implementation of LSTM-DynAE, including the LSTM
 Autoencoder, adversarial interpolation pretraining, the dynamic clustering
